@@ -1,5 +1,5 @@
 
 # XARC
 
-*X*arc is an *A*bc *R*untime in *C*.
+XARC means Xarc is an Abc Runtime in C.
 
