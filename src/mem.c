@@ -9,7 +9,7 @@ static void _oom()
 	abort();
 }
 
-static size_t _memUsed;
+static size_t _memUsed = 0;
 
 size_t mem_usage()
 {
