@@ -5,7 +5,7 @@
 
 /*** ABC Constants ***/
 
-typedef enum _AbcPoolType {
+typedef enum {
 	POOL_TYPE_unused_0x00        = 0x00,
 	POOL_TYPE_Utf8               = 0x01,
 	POOL_TYPE_Int                = 0x03,
@@ -35,7 +35,7 @@ typedef enum _AbcPoolType {
 	POOL_TYPE_TypeName           = 0x1D
 } AbcPoolType;
 
-typedef enum _AbcTraitKind {
+typedef enum {
     TRAIT_Slot          = 0x00,
     TRAIT_Method        = 0x01,
     TRAIT_Getter        = 0x02,
@@ -46,47 +46,47 @@ typedef enum _AbcTraitKind {
     TRAIT_mask          = 15
 } AbcTraitKind;
 
-typedef enum _AbcMethodFlags
+typedef enum
 {
     /** need arguments[0..argc] */
-    abcMethod_NEED_ARGUMENTS         = 0x01,
+    METHOD_NEED_ARGUMENTS         = 0x01,
 
     /** need activation object */
-    abcMethod_NEED_ACTIVATION        = 0x02,
+    METHOD_NEED_ACTIVATION        = 0x02,
 
     /** need arguments[param_count+1..argc] */
-    abcMethod_NEED_REST              = 0x04,
+    METHOD_NEED_REST              = 0x04,
 
     /** has optional parameters */
-    abcMethod_HAS_OPTIONAL           = 0x08,
+    METHOD_HAS_OPTIONAL           = 0x08,
 
     /** allow extra args, but dont capture them */
-    abcMethod_IGNORE_REST            = 0x10,
+    METHOD_IGNORE_REST            = 0x10,
 
     /** method is native */
-    abcMethod_NATIVE                 = 0x20,
+    METHOD_NATIVE                 = 0x20,
 
     /** method sets default namespace */
-    abcMethod_SETS_DXNS              = 0x40,
+    METHOD_SETS_DXNS              = 0x40,
 
     /** method has table for parameter names */
-    abcMethod_HAS_PARAM_NAMES        = 0x80
+    METHOD_HAS_PARAM_NAMES        = 0x80
 } AbcMethodFlags;
 
-const int ATTR_final            = 0x10; // 1=final, 0=virtual
-const int ATTR_override         = 0x20; // 1=override, 0=new
-const int ATTR_metadata         = 0x40; // 1=has metadata, 0=no metadata
+const uint8_t ATTR_final            = 0x10; // 1=final, 0=virtual
+const uint8_t ATTR_override         = 0x20; // 1=override, 0=new
+const uint8_t ATTR_metadata         = 0x40; // 1=has metadata, 0=no metadata
 
 /*** OPCODE DATA ***/
 
-enum AbcOpcode
+typedef enum
 {
 #define ABC_OP(a, b, c, d, name) OP_##name,
 #define ABC_UNUSED_OP ABC_OP
 #include "opcodes.tbl"
 #undef ABC_OP
 #undef ABC_UNUSED_OP
-};
+} AbcOpcode;
 
 typedef struct _AbcOpcodeInfo {
 	int8_t operands;
@@ -96,6 +96,8 @@ typedef struct _AbcOpcodeInfo {
 } AbcOpcodeInfo;
 
 extern const AbcOpcodeInfo Opcode_Info[];
+
+/*** Struct Objects ***/
 
 typedef struct _AbcFile AbcFile;
 typedef struct _AbcConstantPool AbcConstantPool;
@@ -142,6 +144,11 @@ struct _AbcFile {
 
 // CONSTANT POOL
 
+/*
+ * Note: the AVM2 spec uses the word Multiname for two different concepts,
+ * the kind contained in the cpool is called a Name here.
+ */
+
 struct _AbcConstantPool {
 	uint32_t numInts;
 	uint32_t numUints;
@@ -149,7 +156,7 @@ struct _AbcConstantPool {
 	uint32_t numStrings;
 	uint32_t numNamespaces;
 	uint32_t numNssets;
-	uint32_t numMultinames;
+	uint32_t numNames;
 	int32_t * ints;
 	uint32_t * uints;
 	double * doubles;

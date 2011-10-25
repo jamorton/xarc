@@ -4,4 +4,6 @@
 
 #include "abc_data.h"
 
+AbcFile * abc_file_parse(FILE * f);
+
 #endif
